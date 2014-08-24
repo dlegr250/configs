@@ -1,0 +1,63 @@
+#!/bin/bash
+
+#======================================================================
+# Updated: 2014-06-07 DCL / Created: 2013-11-14 DCL
+# Desc: Script for automating git commits
+# -----
+# * Updated for Git 2.0 ("--ignore-removal")
+# * Assumes the local Rails app has already setup git
+#======================================================================
+
+# Config
+#----------------------------------------------------------------------
+
+# set -x # Output every command
+set -e # Exit if any command fails
+
+# Variables - all
+#----------------------------------------------------------------------
+
+script_path=$0
+current_path=$(pwd)
+
+# Check if app is using git ('.git' folder exists)
+#----------------------------------------------------------------------
+
+if [[ ! -d ".git" ]]; then
+  echo "-----> ERROR: no '.git' folder found in: '$current_path'"
+  echo "-----> Script: '$script_path'"
+  exit
+fi
+
+# Variables - app
+#----------------------------------------------------------------------
+
+git_repo_origin_name=$(git ls-remote --get-url)
+
+# Script - At this point, assume app is using Git
+#----------------------------------------------------------------------
+
+echo "#======================================================================"
+echo "# Script: $script_path"
+echo "# Repo:   $git_repo_origin_name"
+echo "#======================================================================"
+
+# Get the one-line commit message
+read -p "Message: " msg
+echo "-----> Begin automated git commit..."
+
+# Commit and push the code to Github
+echo "-----> git add ."
+git add .
+
+echo "-----> git commit -m MESSAGE"
+git commit -m "$msg"
+
+echo "-----> git push origin master"
+git push origin master
+
+echo "-----> End automated git commit"
+
+echo "#----------------------------------------------------------------------"
+echo "# Check Codeship.io for build issues"
+echo "#----------------------------------------------------------------------"

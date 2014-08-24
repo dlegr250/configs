@@ -1,0 +1,6 @@
+= What is this?
+
+This is a repository to store standard config files that I have found useful. From Atom editor styles to bash profiles, this is a single
+location to store a wide variety of items I have found useful.
+
+It is easier to store them in a single location instead of constantly copying/pasting/emailing them around to install on various machines.

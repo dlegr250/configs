@@ -1,0 +1,173 @@
+# Your snippets
+#
+# Atom snippets allow you to enter a simple prefix in the editor and hit tab to
+# expand the prefix into a larger code block with templated values.
+#
+# You can create a new snippet in this file by typing "snip" and then hitting
+# tab.
+#
+# An example CoffeeScript snippet to expand log to console.log:
+#
+# '.source.coffee':
+#   'Console log':
+#     'prefix': 'log'
+#     'body': 'console.log $1'
+#
+
+#======================================================================
+# JavaScript
+#======================================================================
+
+'.source.js':
+  'JavaScript line comment':
+    'prefix': 'linec'
+    'body': """
+      // ${1:text...}
+      //----------------------------------------------------------------------$2
+    """
+
+  'JavaScript block comment':
+    'prefix': 'com'
+    'body': """
+      //======================================================================
+      // ${1:text...}
+      //======================================================================$2
+    """
+
+#======================================================================
+# CoffeeScript
+#======================================================================
+
+'.source.coffee':
+  'CoffeeScript line comment':
+    'prefix': 'linec'
+    'body': """
+      # ${1:text...}
+      #----------------------------------------------------------------------$2
+    """
+
+  'CoffeeScript block comment':
+    'prefix': 'com'
+    'body': """
+      #======================================================================
+      # ${1:text...}
+      #======================================================================$2
+    """
+
+#======================================================================
+# CSS / SCSS / SASS
+#======================================================================
+
+'.source.css':
+  'CSS line comment':
+    'prefix': 'linec'
+    'body': """
+      // ${1:text...}
+      //----------------------------------------------------------------------$2
+    """
+
+  'CSS block comment':
+    'prefix': 'com'
+    'body': """
+      //======================================================================
+      // ${1:text...}
+      //======================================================================$2
+    """
+
+#======================================================================
+# Ruby
+#======================================================================
+
+'.source.ruby':
+  'Ruby line comment':
+    'prefix': 'linec'
+    'body': """
+      # ${1:text...}
+      #----------------------------------------------------------------------$2
+    """
+
+  'Ruby block comment':
+    'prefix': 'com'
+    'body': """
+      #======================================================================
+      # ${1:text...}
+      #======================================================================$2
+    """
+
+  'Ruby default class':
+    'prefix': 'class'
+    'body': """
+      class ${1:Name}
+        $2
+      end
+    """
+
+  'Ruby default ActiveRecord model':
+    'prefix': 'model'
+    'body': """
+      class ${1:Name} < ActiveRecord::Base
+        $2
+      end
+    """
+
+  'Ruby default controller':
+    'prefix': 'defaultcontroller'
+    'body': """
+      class ${1:Model}Controller < ApplicationController
+        def index
+          @${2:variable}s = ${3:Model}.all
+        end
+
+        def new
+          @${2:variable} = ${3:Model}.new(${2:variable}_params)
+        end
+
+        def create
+          @${2:variable} = ${3:Model}.new(${2:variable}_params)
+          if @${2:variable}.save
+            flash[:notice] = "Successfully created ${2:variable}"
+            redirect_to ${2:variable}s_path
+          else
+            flash[:error] = "Problem creating ${2:variable}"
+            render "new"
+          end
+        end
+
+        def show
+          @${2:variable} = get_${2:variable}(params[:id])
+        end
+
+        def edit
+          @${2:variable} = get_${2:variable}(params[:id])
+        end
+
+        def update
+          @${2:variable} = get_${2:variable}(params[:id])
+          if @${2:variable}.update_attributes(${2:variable}_params)
+            flash[:notice] = "Successfully updated ${2:variable}"
+            redirect_to ${2:variable}s_path
+          else
+            flash[:error] = "Problem updating ${2:variable}"
+            render "edit"
+          end
+        end
+
+        def destroy
+          @${2:variable} = get_${2:variable}(params[:id])
+          @${2:variable}.destroy
+          flash[:notice] = "Successfully deleted @${2:variable}"
+          redirect_to ${2:variable}s_path
+        end
+
+        private
+
+        def get_${2:variable}(${2:variable}_id)
+          ${3:Model}.find_by(id: ${2:variable}_id)
+        end
+
+        def ${2:variable}_params
+          params.require(:${2:variable}).permit()
+        end
+      end
+
+    """
