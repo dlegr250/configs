@@ -1,0 +1,9 @@
+# 2014-09-10 15:40 / DCL
+Atom Alignment
+Autocomplete Plus
+Color Picker
+Enhanced Package List
+Fancy New File
+File Icons
+Highlight Line
+Railscast Theme
