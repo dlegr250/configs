@@ -2,7 +2,7 @@
 
 #======================================================================
 # Desc: Adds convenient extensions/aliases to Git via shell scripts.
-# Maintainer: Dan LeGrand (dlegrand@iqt.org, dan.legrand@gmail.com)
+# Maintainer: Dan LeGrand (dan.legrand@gmail.com)
 #======================================================================
 
 # Config
