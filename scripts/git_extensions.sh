@@ -44,7 +44,15 @@ __new_branch() {
     echo "* Repo: $(__git_repo_url)"
     echo "* From: $(__current_git_branch)"
     echo "*   To: $full_branch_name"
+
+    # Certain types of branches can only branch from/to select branches
+    # feature: from develop to develop
+    # bug:     from develop to develop
+    # release: from develop to develop/master
+    # hotfix:  from master  to develop/master
+
     local cmd="git checkout -b $full_branch_name"
+
     echo "=> $cmd"
   fi
 }
@@ -55,6 +63,8 @@ __join_text_with_hyphens() {
   for i in "$@"; do
     new_branch_name="$new_branch_name-$i"
   done
+
+  # Strip out leading '-'
   echo ${new_branch_name:1}
 }
 
@@ -79,6 +89,11 @@ refactor() {
 # New release branch
 release() {
   __new_branch "bug" $(__join_text_with_hyphens $*)
+}
+
+# New hotfix branch
+hotfix() {
+  __new_branch "hotfix" $(__join_text_with_hyphens $*)
 }
 
 # Only delete locally
