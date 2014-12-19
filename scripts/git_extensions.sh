@@ -2,7 +2,9 @@
 
 #======================================================================
 # Desc: Adds convenient extensions/aliases to Git via shell scripts.
-# Maintainer: Dan LeGrand (dan.legrand@gmail.com)
+# Maintainer: Dan LeGrand
+# * Functions prefixed with '__' are script-related functions and
+#   should not be called by external scripts.
 #======================================================================
 
 # Config
@@ -24,6 +26,7 @@ __current_dir_has_git() {
   return 1                         # if nothing was found, return failure
 }
 
+# Absolute URL of git repo
 __git_repo_url() {
   git ls-remote --get-url
 }
@@ -32,6 +35,7 @@ __current_git_branch() {
   git rev-parse --abbrev-ref HEAD
 }
 
+# Used by specialized create branch functions
 __new_branch() {
   __current_dir_has_git || return
   if [ -z "$2" ]; then
@@ -46,10 +50,10 @@ __new_branch() {
     echo "*   To: $full_branch_name"
 
     # Certain types of branches can only branch from/to select branches
-    # feature: from develop to develop
-    # bug:     from develop to develop
-    # release: from develop to develop/master
-    # hotfix:  from master  to develop/master
+    # feature: from develop to develop (deploy to development/test)
+    # bug:     from develop to develop (deploy to development)
+    # release: from develop to develop/master (deploy to production)
+    # hotfix:  from master  to develop/master (deploy to development/production)
 
     local cmd="git checkout -b $full_branch_name"
 
@@ -68,69 +72,98 @@ __join_text_with_hyphens() {
   echo ${new_branch_name:1}
 }
 
-# Command methods
+# Create branches
 #----------------------------------------------------------------------
 
-# New feature branch
+# New feature/... branch
+# From development
 feature() {
   __new_branch "feature" $(__join_text_with_hyphens $*)
 }
 
-# New bug branch
+# New bug/... branch
+# From release to development/release
 bug() {
   __new_branch "bug" $(__join_text_with_hyphens $*)
 }
 
-# New refactor branch
+# New refactor/... branch
+# From development to development
 refactor() {
   __new_branch "bug" $(__join_text_with_hyphens $*)
 }
 
-# New release branch
+# New release/... branch
+# From development to development/master
 release() {
   __new_branch "bug" $(__join_text_with_hyphens $*)
 }
 
-# New hotfix branch
+# New hotfix/... branch
+# From master to development/master
 hotfix() {
   __new_branch "hotfix" $(__join_text_with_hyphens $*)
 }
 
-# Only delete locally
+# Delete branches
+#----------------------------------------------------------------------
+
+# Only delete local branch
 delete_local_branch() {
   if [ -z "$1" ]; then
     echo "-----> ERROR: No branch name given!"
   else
     local branch_name=$1
-    echo "* Deleting local branch: $branch_name"
     local cmd="git branch -d $branch_name"
     echo "=> $cmd"
   fi
 }
 
-# Only delete remotely
+# Only delete remote branch
 delete_remote_branch() {
   if [ -z "$1" ]; then
     echo "-----> ERROR: No branch name given!"
   else
     local branch_name=$1
-    echo "* Deleting remote branch: $branch_name"
     local cmd="git push origin --delete $branch_name"
     echo "=> $cmd"
   fi
 }
 
-# Delete branch both locally and remotely
+# Delete both local and remote branch
 delete_branch() {
   local branch_name=$1
 
-  # Confirm from user
+  # Have user confirm they want to completely delete this branch
   read -p "Are you sure? (Y/N): " -r
 
   if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "Deleting branch from both local and remote repos"
     delete_local_branch $branch_name
     delete_remote_branch $branch_name
   else
     echo "Canceling delete"
+  fi
+}
+
+# List/switch branches
+#----------------------------------------------------------------------
+
+# List branches ('*' marks current branch)
+branches() {
+  __current_dir_has_git || return
+  git branch
+}
+
+# Switch to new branch
+checkout() {
+  __current_dir_has_git || return
+  if [ -z "$1" ]; then
+    echo "-----> ERROR: No branch name given!"
+  else
+    branch_name=$1
+    local cmd="git checkout $branch_name"
+    echo "=> $cmd"
+    $cmd
   fi
 }
