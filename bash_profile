@@ -1,6 +1,5 @@
 #======================================================================
-# Updated: 2014-06-04 / Created: 2013-12-07
-# .bash_profile is loaded once at login
+# Desc: '.bash_profile' is loaded once at terminal start.
 #======================================================================
 
 # GIT autocomplete (GIT TAB-TAB)
@@ -20,7 +19,8 @@ source ~/scripts/git_prompt.sh
 # Prompt color: http://www.mactricksandtips.com/2008/10/customizing-the-mac-terminal-bash-prompt.html
 #----------------------------------------------------------------------
 
-PS1='== \[\e[1;34m\][\w]$(__git_ps1 " (%s)") $ '
+# PS1='\[\e[1;34m\][\w]$(__git_ps1 " (%s)") \r\n$  \e[1;34m\]'
+PS1='\[\e[1;33m\][\w]$(__git_ps1 " (%s)")\r\n$ \[\e[0;37m\]'
 
 # Change default file color listings
 # See: http://geekology.co.za/article/2009/04/how-to-enable-terminals-directory-and-file-color-highlighting-in-mac-os-x
@@ -57,7 +57,7 @@ PS1='== \[\e[1;34m\][\w]$(__git_ps1 " (%s)") $ '
 # x default foreground or background
 
 export CLICOLOR=1
-export LSCOLORS=AEFxBxDxbxegedabagacad
+export LSCOLORS=HEFxBxDxbxegedabagacad
 
 # Add ~/scripts folder to $PATH
 #----------------------------------------------------------------------
@@ -65,16 +65,26 @@ export LSCOLORS=AEFxBxDxbxegedabagacad
 export "PATH=$PATH:~/scripts"
 export PATH=/usr/local/bin:$PATH
 
+# source ~/scripts/git-workflow.sh
+
+# Storing in repo, so source the latest from there
+source ~/rails/git-workflow/git-workflow.sh
+
 # Load RVM into a shell session (as a function)
 #----------------------------------------------------------------------
 
-PATH=$PATH:$HOME/.rvm/bin
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 # Added by the Heroku Toolbelt
 #----------------------------------------------------------------------
 
 export PATH="/usr/local/heroku/bin:$PATH"
+
+# Add RVM to path for scripting (makes RVM happy to have it first)
+#----------------------------------------------------------------------
+
+export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="$GEM_HOME/bin:$PATH"
 
 # Alias commands
 #----------------------------------------------------------------------
